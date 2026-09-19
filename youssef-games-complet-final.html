@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Youssef Games</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#08051a;color:#fff;font-family:Arial,sans-serif}
+header{position:sticky;top:0;z-index:20;background:#12082b;border-bottom:1px solid #442080;padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:24px;font-weight:900;color:#b875ff}.nav{display:flex;gap:10px;flex-wrap:wrap}.nav a{color:#fff;text-decoration:none;padding:9px 12px;border-radius:10px;background:#201044}
+.wrap{max-width:1150px;margin:auto;padding:25px 16px}
+.hero{padding:45px 20px;text-align:center;background:linear-gradient(135deg,#170738,#35106b);border-radius:25px;box-shadow:0 0 35px #4d1688}
+.hero h1{font-size:52px;margin:0 0 10px}.hero p{color:#ddd;font-size:18px}
+.btn{display:inline-block;border:0;border-radius:12px;padding:12px 18px;background:#9b4dff;color:white;font-weight:bold;cursor:pointer;text-decoration:none}
+section{margin-top:28px}.title{font-size:30px;margin-bottom:14px}
+.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.card{background:#130b2b;border:1px solid #39205f;border-radius:18px;padding:18px}
+.card h3{margin-top:0}.muted{color:#aaa}
+#runnerBox{background:#05050b;border:1px solid #5d2aa0;border-radius:20px;padding:14px;box-shadow:0 0 25px #2a1050}
+#game{width:100%;height:620px;display:block;border-radius:15px;overflow:hidden}
+.controls{text-align:center;margin:10px 0;color:#ddd}
+.status{display:flex;justify-content:space-around;flex-wrap:wrap;background:#120b22;border-radius:12px;padding:10px;margin-top:10px;font-weight:bold}
+.shop{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.skin{background:#140c29;border:1px solid #42206d;padding:15px;border-radius:16px;text-align:center}
+.avatar{width:65px;height:65px;border-radius:50%;margin:5px auto 10px;background:#31a8ff;border:5px solid #fff}
+.chat{background:#100922;border:1px solid #40216a;border-radius:18px;padding:15px}
+#messages{height:300px;overflow:auto;background:#070411;border-radius:12px;padding:12px;margin-bottom:12px}
+.msg{padding:8px 10px;background:#1b1032;border-radius:10px;margin:7px 0}
+.chatrow{display:flex;gap:8px}.chatrow input{flex:1;padding:12px;border-radius:10px;border:0}
+.socials{display:flex;gap:12px;flex-wrap:wrap}.socials a{padding:12px 15px;border-radius:12px;text-decoration:none;color:#fff;background:#201044}
+footer{text-align:center;color:#888;padding:35px}
+@media(max-width:600px){.hero h1{font-size:38px}#game{height:520px}.nav{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🎮 YOUSSEF GAMES</div>
+  <nav class="nav">
+    <a href="#accueil">Accueil</a><a href="#jeux">Jeux</a><a href="#runner">Runner 3D</a>
+    <a href="#boutique">Boutique</a><a href="#messages">Messages</a><a href="#reseaux">Réseaux</a>
+  </nav>
+</header>
+
+<main class="wrap">
+<section id="accueil" class="hero">
+  <h1>YOUSSEF GAMES</h1>
+  <p>Joue, bats tes records et débloque des skins !</p>
+  <a class="btn" href="#runner">🎮 Jouer au Runner 3D</a>
+</section>
+
+<section id="jeux">
+<h2 class="title">🔥 Mes jeux</h2>
+<div class="games">
+ <div class="card"><h3>🏃 Runner 3D</h3><p class="muted">Cours sur 3 voies, évite les trains et récupère les pièces.</p><a class="btn" href="#runner">Jouer</a></div>
+ <div class="card"><h3>🐍 Snake</h3><p class="muted">Le classique Snake.</p></div>
+ <div class="card"><h3>⚡ Réflexe</h3><p class="muted">Teste ta vitesse.</p></div>
+ <div class="card"><h3>🧱 Casse-Briques</h3><p class="muted">Détruis les briques.</p></div>
+</div>
+</section>
+
+<section id="runner">
+<h2 class="title">🏃 Youssef Runner 3D</h2>
+<div id="runnerBox">
+ <div class="controls">⬅️ <b>←</b> gauche &nbsp; | &nbsp; <b>→</b> droite &nbsp; | &nbsp; <b>↑</b> ou <b>ESPACE</b> sauter</div>
+ <div id="game"></div>
+ <div class="status"><span>🪙 Pièces : <b id="coins">0</b></span><span>🏆 Score : <b id="score">0</b></span><span>🚦 Vitesse : <b id="speed">1</b></span></div>
+ <div style="text-align:center;margin-top:12px"><button class="btn" id="start">▶️ Commencer / Recommencer</button></div>
+ <p id="error" style="display:none;color:#ff7777;text-align:center">Le moteur 3D n'a pas pu se charger. Vérifie ta connexion Internet puis recharge la page.</p>
+</div>
+</section>
+
+<section id="boutique">
+<h2 class="title">🛍️ Boutique des skins</h2>
+<p>Pièces virtuelles : <b id="shopCoins">0</b> 🪙</p>
+<div class="shop" id="shop"></div>
+</section>
+
+<section id="messages">
+<h2 class="title">💬 Messagerie</h2>
+<div class="chat">
+ <p class="muted">Choisis un pseudo puis écris un message. Cette version fonctionne localement dans ce navigateur.</p>
+ <div class="chatrow"><input id="pseudo" placeholder="Ton pseudo"><input id="messageInput" placeholder="Écris ton message..."><button class="btn" id="send">Envoyer</button></div>
+ <div id="messagesList"></div>
+</div>
+</section>
+
+<section id="reseaux">
+<h2 class="title">📱 Mes réseaux</h2>
+<div class="socials">
+<a href="https://www.youtube.com/@ysf-14" target="_blank">▶️ YouTube</a>
+<a href="https://www.tiktok.com/@youssefboxin10.6" target="_blank">🎵 TikTok</a>
+<a href="https://www.snapchat.com/add/youssefatrokouk" target="_blank">👻 Snapchat</a>
+</div>
+</section>
+</main>
+<footer>© Youssef Games — jeux et contenu gaming</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+const coinEl=document.getElementById('coins'), shopCoins=document.getElementById('shopCoins');
+let coins=Number(localStorage.getItem('yg_coins')||0);
+function setCoins(n){coins=Math.max(0,n);localStorage.setItem('yg_coins',coins);coinEl.textContent=coins;shopCoins.textContent=coins}
+setCoins(coins);
+
+const skins=[
+ ['Bleu',50,'#31a8ff'],['Rouge',100,'#ff3d57'],['Vert',150,'#39e36d'],
+ ['Néon',250,'#d94dff'],['Roi',500,'#ffd447'],['Arc-en-ciel',1000,'linear-gradient(90deg,#f44,#ff4,#4f4,#4ff,#84f)']
+];
+let owned=JSON.parse(localStorage.getItem('yg_skins')||'["Bleu"]'), currentSkin=localStorage.getItem('yg_skin')||'Bleu';
+function renderShop(){
+ const s=document.getElementById('shop');s.innerHTML='';
+ skins.forEach(x=>{
+  const d=document.createElement('div');d.className='skin';
+  const av=document.createElement('div');av.className='avatar';av.style.background=x[2];
+  const ownedTxt=owned.includes(x[0]);
+  d.innerHTML=av.outerHTML+'<b>'+x[0]+'</b><p>'+x[1]+' 🪙</p>';
+  const b=document.createElement('button');b.className='btn';b.textContent=ownedTxt?(currentSkin===x[0]?'Équipé':'Équiper'):'Acheter';
+  b.onclick=()=>{if(owned.includes(x[0])){currentSkin=x[0];localStorage.setItem('yg_skin',currentSkin);renderShop();applySkin();}else if(coins>=x[1]){setCoins(coins-x[1]);owned.push(x[0]);localStorage.setItem('yg_skins',JSON.stringify(owned));currentSkin=x[0];localStorage.setItem('yg_skin',currentSkin);renderShop();applySkin();}else alert('Pas assez de pièces !')};
+  d.appendChild(b);s.appendChild(d);
+ });
+}
+renderShop();
+
+const container=document.getElementById('game');
+let scene,camera,renderer,player,playerGroup,lanes=[-3,0,3],lane=1,vy=0,jumping=false,running=false;
+let obstacles=[],coinObjects=[],lastTime=0,score=0,speed=0.28,spawnTimer=0,coinTimer=0;
+const scoreEl=document.getElementById('score'),speedEl=document.getElementById('speed');
+
+function box(w,h,d,c,x,y,z){
+ const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({color:c}));
+ m.position.set(x,y,z);scene.add(m);return m;
+}
+function setup(){
+ scene=new THREE.Scene();scene.background=new THREE.Color(0x101528);
+ camera=new THREE.PerspectiveCamera(65,1,0.1,300);camera.position.set(0,5.3,11);camera.lookAt(0,2,-10);
+ renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setSize(container.clientWidth,container.clientHeight);container.innerHTML='';container.appendChild(renderer.domElement);
+ scene.add(new THREE.HemisphereLight(0xffffff,0x333344,2));
+ const sun=new THREE.DirectionalLight(0xffffff,2);sun.position.set(10,20,10);scene.add(sun);
+
+ // rails and ground
+ box(12,.25,190,0x22222a,0,0,-65);
+ [-1.5,1.5].forEach(x=>box(.12,.12,190,0xaaaaaa,x,.18,-65));
+ for(let z=-5;z>-180;z-=6){box(.12,.08,2,0x777777,-1.5,.25,z);box(.12,.08,2,0x777777,1.5,.25,z)}
+ // city
+ for(let z=-8;z>-170;z-=12){
+  for(const side of [-1,1]){
+   const h=5+Math.random()*12,w=3+Math.random()*4,x=side*(8+Math.random()*5);
+   box(w,h,8,side<0?0x292a45:0x20263b,x,h/2,z);
+   for(let yy=2;yy<h;yy+=2.5) box(.35,.45,.08,0x8bdcff,x+side*1.0,yy,z-4.05);
+  }
+ }
+ // signs
+ for(let z=-25;z>-160;z-=28){
+   box(4,1.2,.2,0xb84dff,sideRand(),7,z);
+ }
+ playerGroup=new THREE.Group();scene.add(playerGroup);
+ const body=new THREE.Mesh(new THREE.BoxGeometry(1.2,1.8,.75),new THREE.MeshStandardMaterial({color:0x31a8ff}));
+ body.position.y=2.1;playerGroup.add(body);player=body;
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.55,16,12),new THREE.MeshStandardMaterial({color:0xf1b48b}));
+ head.position.y=3.45;playerGroup.add(head);
+ const backpack=new THREE.Mesh(new THREE.BoxGeometry(.9,1.1,.4),new THREE.MeshStandardMaterial({color:0x202020}));
+ backpack.position.set(0,2.1,.55);playerGroup.add(backpack);
+ for(const x of [-.38,.38]){const leg=boxLocal(.3,1,.4,0x222222,x,1.1,0);playerGroup.add(leg)}
+ for(const x of [-.38,.38]){const sh=boxLocal(.4,.25,.7,0xffffff,x,.55,-.05);playerGroup.add(sh)}
+ playerGroup.position.set(0,0,7);
+ applySkin();
+ window.addEventListener('resize',resize);
+}
+function boxLocal(w,h,d,c,x,y,z){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({color:c}));m.position.set(x,y,z);return m}
+function sideRand(){return Math.random()<.5?-8:8}
+function applySkin(){if(player) player.material.color.set(skins.find(x=>x[0]===currentSkin)?.[2].startsWith('#')?skins.find(x=>x[0]===currentSkin)[2]:0xff55ff)}
+function train(z,l){
+ const g=new THREE.Group();g.position.set(lanes[l],1.8,z);
+ const body=new THREE.Mesh(new THREE.BoxGeometry(2.5,3.4,8),new THREE.MeshStandardMaterial({color:0xd52f4a}));
+ g.add(body);
+ for(let x of [-.7,.7])for(let zz of [-2.5,0,2.5]){const w=new THREE.Mesh(new THREE.BoxGeometry(.5,.65,.08),new THREE.MeshStandardMaterial({color:0x8eeaff}));w.position.set(x,0.7,zz-4.02);g.add(w)}
+ scene.add(g);obstacles.push({g,l});
+}
+function coin(z,l){
+ const m=new THREE.Mesh(new THREE.TorusGeometry(.38,.12,10,20),new THREE.MeshStandardMaterial({color:0xffd52e,metalness:.6}));
+ m.position.set(lanes[l],1.7,z);scene.add(m);coinObjects.push(m);
+}
+function startGame(){
+ obstacles.forEach(o=>scene.remove(o.g));coinObjects.forEach(o=>scene.remove(o));obstacles=[];coinObjects=[];
+ lane=1;playerGroup.position.x=0;playerGroup.position.y=0;vy=0;jumping=false;score=0;speed=.28;running=true;lastTime=performance.now();requestAnimationFrame(loop);
+}
+function jump(){if(running&&!jumping){vy=.22;jumping=true}}
+function move(dir){if(running)lane=Math.max(0,Math.min(2,lane+dir))}
+function loop(t){
+ if(!running)return;const dt=Math.min(2,(t-lastTime)/16.67);lastTime=t;
+ playerGroup.position.x += (lanes[lane]-playerGroup.position.x)*.18*dt;
+ if(jumping){playerGroup.position.y+=vy*dt;vy-=.012*dt;if(playerGroup.position.y<=0){playerGroup.position.y=0;vy=0;jumping=false}}
+ camera.position.x+=(playerGroup.position.x*.25-camera.position.x)*.08*dt;camera.lookAt(playerGroup.position.x*.2,2,-15);
+ spawnTimer+=dt;coinTimer+=dt;
+ if(spawnTimer>48){spawnTimer=0;train(-105-Math.random()*25,Math.floor(Math.random()*3))}
+ if(coinTimer>18){coinTimer=0;coin(-80-Math.random()*40,Math.floor(Math.random()*3))}
+ obstacles.forEach(o=>o.g.position.z+=speed*dt*3);
+ coinObjects.forEach(c=>{c.rotation.y+=.08*dt;c.position.z+=speed*dt*3});
+ for(let i=obstacles.length-1;i>=0;i--){const o=obstacles[i];if(o.g.position.z>18){scene.remove(o.g);obstacles.splice(i,1)}else if(Math.abs(o.g.position.z-playerGroup.position.z)<3&&Math.abs(o.g.position.x-playerGroup.position.x)<1.4&&playerGroup.position.y<1.3){running=false;setCoins(coins-20);alert('💥 Tu as percuté un train ! -20 pièces');return}}
+ for(let i=coinObjects.length-1;i>=0;i--){const c=coinObjects[i];if(c.position.z>15){scene.remove(c);coinObjects.splice(i,1)}else if(c.position.distanceTo(new THREE.Vector3(playerGroup.position.x,playerGroup.position.y+1.7,playerGroup.position.z))<1.3){scene.remove(c);coinObjects.splice(i,1);setCoins(coins+5)}}
+ score+=speed*dt*1.5;scoreEl.textContent=Math.floor(score);speedEl.textContent=(speed/.28).toFixed(1);
+ if(Math.floor(score)>0&&Math.floor(score)%1000<3){setCoins(coins+20)}
+ renderer.render(scene,camera);requestAnimationFrame(loop);
+}
+function resize(){if(!renderer)return;renderer.setSize(container.clientWidth,container.clientHeight);camera.aspect=container.clientWidth/container.clientHeight;camera.updateProjectionMatrix()}
+document.getElementById('start').onclick=startGame;
+document.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','Space'].includes(e.code))e.preventDefault();if(e.code==='ArrowLeft')move(-1);if(e.code==='ArrowRight')move(1);if(e.code==='ArrowUp'||e.code==='Space')jump()});
+try{setup()}catch(e){document.getElementById('error').style.display='block';console.error(e)}
+
+const list=document.getElementById('messagesList'), saved=JSON.parse(localStorage.getItem('yg_chat')||'[]');
+function renderChat(){list.innerHTML='';saved.forEach(m=>{const d=document.createElement('div');d.className='msg';d.textContent=m.name+': '+m.text;list.appendChild(d)})}
+renderChat();
+document.getElementById('send').onclick=()=>{
+ const name=document.getElementById('pseudo').value.trim()||'Joueur';
+ const text=document.getElementById('messageInput').value.trim();if(!text)return;
+ saved.push({name,text});localStorage.setItem('yg_chat',JSON.stringify(saved));document.getElementById('messageInput').value='';renderChat();
+}
+</script>
+</body>
+</html>
